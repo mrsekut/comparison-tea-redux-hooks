@@ -1,43 +1,35 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTodo, deleteTodo, handleChangeForm } from './modules/module';
-import { ReduxState, ReduxAction } from './store';
+import { ReduxState } from './store';
 
-type ContaienrProps = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps>;
+const App: React.FC = () => {
+  const dispatch = useDispatch(); // storeに紐付いたdispatchを取得
+  const formValue = useSelector(({ reducer }: ReduxState) => reducer.formValue);
+  const todos = useSelector(({ reducer }: ReduxState) => reducer.todos);
 
-const mapStateToProps = ({ reducer }: ReduxState) => ({
-  ...reducer
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<ReduxAction>) =>
-  bindActionCreators({ addTodo, deleteTodo, handleChangeForm }, dispatch);
-
-const App: React.FC<ContaienrProps> = ({ formValue, todos, ...props }) => (
-  <div>
-    <input
-      type="text"
-      placeholder="todo"
-      value={formValue}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        props.handleChangeForm(e.target.value)
-      }
-    />
-    <button onClick={props.addTodo}>add</button>
+  return (
     <div>
-      <ul>
-        {todos.map(t => (
-          <li key={t.id} onClick={() => props.deleteTodo(t.id)}>
-            {t.todo}
-          </li>
-        ))}
-      </ul>
+      <input
+        type="text"
+        placeholder="todo"
+        value={formValue}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          dispatch(handleChangeForm(e.target.value))
+        }
+      />
+      <button onClick={() => dispatch(addTodo())}>add</button>
+      <div>
+        <ul>
+          {todos.map(t => (
+            <li key={t.id} onClick={() => dispatch(deleteTodo(t.id))}>
+              {t.todo}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default App;
