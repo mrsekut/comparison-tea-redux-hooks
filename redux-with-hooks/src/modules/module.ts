@@ -3,12 +3,14 @@ import { Reducer } from 'redux';
 // Initial State
 // =============================
 
+export type Todos = Array<{
+  id: number;
+  todo: string;
+}>;
+
 export interface MainState {
   readonly formValue: string;
-  readonly todos: Array<{
-    id: number;
-    todo: string;
-  }>;
+  readonly todos: Todos;
 }
 
 const initialState: MainState = { formValue: '', todos: [] };
@@ -26,7 +28,7 @@ enum ActionTypes {
 // =============================
 
 export type MainActions = ReturnType<
-  typeof handleChangeForm | typeof addTodo | typeof deleteTodo
+  typeof handleChangeFormAction | typeof addTodoAction | typeof deleteTodoAction
 >;
 
 const reducer: Reducer<MainState, MainActions> = (
@@ -64,7 +66,7 @@ export default reducer;
 // Action Creator
 // =============================
 
-export const handleChangeForm = (formValue: string) => ({
+export const handleChangeFormAction = (formValue: string) => ({
   type: ActionTypes.INPUT as ActionTypes.INPUT,
   payload: {
     formValue
@@ -72,14 +74,14 @@ export const handleChangeForm = (formValue: string) => ({
 });
 
 let nextId = 0;
-export const addTodo = () => ({
+export const addTodoAction = () => ({
   type: ActionTypes.ADD as ActionTypes.ADD,
   payload: {
     nextId: nextId++
   }
 });
 
-export const deleteTodo = (id: number) => ({
+export const deleteTodoAction = (id: number) => ({
   type: ActionTypes.DELETE as ActionTypes.DELETE,
   payload: {
     id
