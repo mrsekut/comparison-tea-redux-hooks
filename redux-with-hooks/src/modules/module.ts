@@ -15,30 +15,19 @@ export interface MainState {
 
 const initialState: MainState = { formValue: '', todos: [] };
 
-// Action Types
-// =============================
-
-enum ActionTypes {
-  INPUT = 'INPUT',
-  ADD = 'ADD',
-  DELETE = 'DELETE'
-}
-
 // Reducer
 // =============================
 
-export type MainActions = ReturnType<
-  typeof handleChangeFormAction | typeof addTodoAction | typeof deleteTodoAction
->;
+export type MainActions = any; // FIXME: type
 
 const reducer: Reducer<MainState, MainActions> = (
   state = initialState,
   action
 ) => {
   switch (action.type) {
-    case ActionTypes.INPUT:
+    case 'INPUT':
       return { ...state, formValue: action.payload.formValue };
-    case ActionTypes.ADD:
+    case 'ADD':
       return {
         ...state,
         formValue: '',
@@ -50,40 +39,15 @@ const reducer: Reducer<MainState, MainActions> = (
           }
         ]
       };
-    case ActionTypes.DELETE:
+    case 'DELETE':
       return {
         ...state,
         todos: state.todos.filter(todo => todo.id !== action.payload.id)
       };
     default:
-      const _: never = action;
+      // const _: never = action;
       return state;
   }
 };
 
 export default reducer;
-
-// Action Creator
-// =============================
-
-export const handleChangeFormAction = (formValue: string) => ({
-  type: ActionTypes.INPUT as ActionTypes.INPUT,
-  payload: {
-    formValue
-  }
-});
-
-let nextId = 0;
-export const addTodoAction = () => ({
-  type: ActionTypes.ADD as ActionTypes.ADD,
-  payload: {
-    nextId: nextId++
-  }
-});
-
-export const deleteTodoAction = (id: number) => ({
-  type: ActionTypes.DELETE as ActionTypes.DELETE,
-  payload: {
-    id
-  }
-});

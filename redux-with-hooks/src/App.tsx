@@ -1,25 +1,31 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  addTodoAction,
-  deleteTodoAction,
-  handleChangeFormAction
-} from './modules/module';
 import { ReduxState } from './store';
 import useActions from './modules/useActions';
 
+let nextId = 0;
 const useTodo = () => {
   const todos = useSelector(({ reducer }: ReduxState) => reducer.todos);
-  const addTodo = useActions(addTodoAction);
-  const deleteTodo = useActions((id: number) => deleteTodoAction(id));
+  const addTodo = useActions(() => ({
+    type: 'ADD',
+    payload: {
+      nextId: nextId++
+    }
+  }));
+  const deleteTodo = useActions((id: number) => ({
+    type: 'DELETE',
+    payload: { id }
+  }));
 
   return [todos, addTodo, deleteTodo] as const;
 };
 
 const useInput = () => {
   const formValue = useSelector(({ reducer }: ReduxState) => reducer.formValue);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    handleChangeFormAction(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => ({
+    type: 'INPUT',
+    payload: { formValue: e.target.value }
+  });
   const setInput = useActions(handleChange);
 
   return [formValue, setInput] as const;
