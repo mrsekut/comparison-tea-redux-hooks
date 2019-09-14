@@ -32,7 +32,7 @@ const App: React.FC = () => {
       <button onClick={addTodo}>add</button>
       <div>
         <ul>
-          {todos.map((t: any) => (
+          {todos.map(t => (
             <li key={t.id} onClick={() => deleteTodo(t.id)}>
               {t.todo}
             </li>

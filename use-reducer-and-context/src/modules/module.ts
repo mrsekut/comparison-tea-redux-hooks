@@ -50,7 +50,7 @@ const reducer: Reducer<MainState, MainActions> = (state, action) => {
     case 'DELETE':
       return {
         ...state,
-        todos: state.todos.filter((todo: any) => todo.id !== action.payload.id)
+        todos: state.todos.filter(todo => todo.id !== action.payload.id)
       };
     default:
       // const _: never = action;
