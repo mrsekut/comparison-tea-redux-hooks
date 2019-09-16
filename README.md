@@ -1,4 +1,4 @@
-# comparison
+# Comparison of multiple implementation Todo lists
 
 ## Elm
 
@@ -11,3 +11,7 @@
 ## Hooks
 
 - `$ cd redux && yarn start`
+
+## useReducer and ContextAPI
+
+- `$ cd use-reducer-and-context && yarn start`
